@@ -5,24 +5,33 @@ const departmentSchema =
         {
             title: {
                 type: String,
-                required: true
+                required: true,
             },
 
             slug: {
                 type: String,
-                required: true
+                unique: true,
+                lowercase: true,
+                trim: true,
             },
 
             image: {
-                type: String
+                type: String,
+                default: "",
             },
 
             description: {
-                type: String
-            }
+                type: String,
+            },
+
+            status: {
+                type: String,
+                enum: ["active", "inactive"],
+                default: "active",
+            },
         },
         {
-            timestamps: true
+            timestamps: true,
         }
     );
 

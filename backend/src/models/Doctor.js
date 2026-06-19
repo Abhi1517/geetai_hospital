@@ -46,7 +46,13 @@ const doctorSchema = new mongoose.Schema(
 
     email: {
       type: String,
-    }
+    },
+
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
   },
   {
     timestamps: true,

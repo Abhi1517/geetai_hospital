@@ -2,9 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import doctorRoutes from "./src/routes/doctorRoutes.js";
+import departmentRoutes from "./src/routes/departmentRoutes.js";
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js";
+import doctorRoutes from "./src/routes/doctorRoutes.js";
+import dashboardRoutes from "./src/routes/dashboardRoutes.js";
 
 dotenv.config();
 
@@ -12,21 +14,32 @@ connectDB();
 
 const app = express();
 
-/* Middleware FIRST */
+/* Middleware */
 app.use(cors());
 
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 app.use(cookieParser());
 
-app.use("/api/doctors",doctorRoutes);
+/* Debug Middleware */
+app.use((req, res, next) => {
+  console.log("METHOD:", req.method);
+  console.log("URL:", req.url);
+  console.log("BODY:", req.body);
+  next();
+});
 
-/* Routes AFTER middleware */
+/* Routes */
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
-
+app.use("/api/departments", departmentRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 app.get("/", (req, res) => {
   res.send("Hospital API Running");
 });
