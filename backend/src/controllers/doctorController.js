@@ -1,62 +1,82 @@
 import Doctor from "../models/Doctor.js";
 
-export const createDoctor =
-async(req,res)=>{
+export const createDoctor = async (req, res) => {
+    try {
+        const doctor = await Doctor.create(req.body);
 
-try{
-
-const doctor =
-await Doctor.create({
-
- name:req.body.name,
-
- designation:req.body.designation,
-
- qualification:req.body.qualification,
-
- specialization:req.body.specialization,
-
- experience:req.body.experience,
-
- image:req.body.image,
-
- about:req.body.about,
-
- timings:req.body.timings
-
-});
-
-res.status(201).json(
- doctor
-);
-
-}catch(error){
-
-res.status(500).json({
- message:error.message
-});
-
-}
+        res.status(201).json({
+            success: true,
+            doctor,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
 };
-export const deleteDoctor =
-async(req,res)=>{
 
-await Doctor.findByIdAndDelete(
- req.params.id
-);
+export const getDoctors = async (req, res) => {
+    try {
+        const doctors = await Doctor.find();
 
-res.json({
- message:"Doctor Deleted"
-});
-
+        res.status(200).json({
+            success: true,
+            doctors,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
 };
-export const getDoctors =
-async(req,res)=>{
+export const updateDoctor = async (req, res) => {
+    try {
 
-const doctors =
-await Doctor.find()
-.sort({createdAt:-1});
+        const doctor =
+            await Doctor.findByIdAndUpdate(
+                req.params.id,
+                req.body,
+                {
+                    new: true,
+                }
+            );
 
-res.json(doctors);
+        res.status(200).json({
+            success: true,
+            doctor,
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+
+    }
+};
+export const deleteDoctor = async (req, res) => {
+
+    try {
+
+        await Doctor.findByIdAndDelete(
+            req.params.id
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Doctor Deleted",
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+
+    }
 
 };

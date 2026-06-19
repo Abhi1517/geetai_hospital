@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
+
 import api from "../services/api";
 
 function Doctors() {
   const [doctors, setDoctors] = useState([]);
 
-  const fetchDoctors = async () => {
-    const res = await api.get("/doctors");
-
-    setDoctors(res.data.doctors);
-  };
-
   useEffect(() => {
     fetchDoctors();
   }, []);
 
+  const fetchDoctors = async () => {
+    const res = await api.get("/doctors");
+
+    setDoctors(res.data);
+  };
+
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-5">Doctors</h1>
+      <h1 className="text-3xl font-bold mb-6">Doctors</h1>
 
-      <table className="w-full border">
+      <table className="w-full">
         <thead>
           <tr>
             <th>Name</th>
@@ -30,13 +31,16 @@ function Doctors() {
         </thead>
 
         <tbody>
-          {doctors.map((doctor) => (
-            <tr key={doctor._id}>
-              <td>{doctor.name}</td>
+          {doctors.map((doc) => (
+            <tr key={doc._id}>
+              <td>{doc.name}</td>
 
-              <td>{doctor.specialization}</td>
+              <td>{doc.specialization}</td>
 
-              <td>{doctor.experience} Years</td>
+              <td>
+                {doc.experience}
+                Years
+              </td>
             </tr>
           ))}
         </tbody>
